@@ -98,11 +98,21 @@ DATABASES = {
     }
 }
 
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     )
+# }
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'asset.pagination.CustomPagination',
+    'PAGE_SIZE': 10,
+    'PAGE_SIZE_QUERY_PARAM': 'page_size',
+
 }
+
 
 
 # Password validation
@@ -189,3 +199,4 @@ AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailAuthBackend',          # <-- our custom backend
     'django.contrib.auth.backends.ModelBackend',   # <-- Django's default (keep this)
 ]
+

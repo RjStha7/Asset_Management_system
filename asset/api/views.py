@@ -13,23 +13,27 @@ from .serializers import (
 class AssetCategoryViewSet(viewsets.ModelViewSet):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
+    queryset = AssetCategory.objects.all().order_by('id')
     queryset = AssetCategory.objects.all()
     serializer_class = AssetCategorySerializer
 
 class AssetViewSet(viewsets.ModelViewSet):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
+    queryset = Asset.objects.all().order_by('AssetId')
     queryset = Asset.objects.all()
     serializer_class = AssetSerializer
 
 class AssetDetailsViewSet(viewsets.ModelViewSet):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
+    queryset = AssetDetails.objects.all().order_by('Sn')
     queryset = AssetDetails.objects.all()
     serializer_class = AssetDetailsSerializer
     
 class AssetOutViewSet(viewsets.ModelViewSet):
     # authentication_classes = [JWTAuthentication]
     # permission_classes = [IsAuthenticated]
+    queryset = AssetOut.objects.all().order_by('Sn')
     queryset = AssetOut.objects.all()
     serializer_class = AssetOutSerializer
