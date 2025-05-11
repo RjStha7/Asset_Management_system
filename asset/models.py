@@ -14,6 +14,7 @@ class AssetCategory(models.Model):
     class Meta:
         verbose_name = "AssetCategory"
         verbose_name_plural = "AssetCategories"
+        ordering = ['id']
     
 
 class Asset(models.Model):
@@ -23,6 +24,9 @@ class Asset(models.Model):
     Description = models.CharField(max_length=500, blank = True)
     Unit = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     AssetCategory = models.ForeignKey(AssetCategory, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['AssetId']
     
     def __str__(self):
         return self.Name
@@ -67,6 +71,7 @@ class AssetDetails(models.Model):
     class Meta:
         verbose_name = "AssetDetails"
         verbose_name_plural = "AssetDetails"
+        ordering = ['Sn']
     
 class AssetOut(models.Model):
     Sn = models.AutoField(primary_key=True)
@@ -83,4 +88,5 @@ class AssetOut(models.Model):
     class Meta:
         verbose_name = "AssetOut"
         verbose_name_plural = "AssetOut"
+        ordering = ['Sn']
     
