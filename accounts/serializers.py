@@ -8,6 +8,8 @@ from django.utils.encoding import smart_str, force_bytes, DjangoUnicodeDecodeErr
 from django.utils.http import urlsafe_base64_decode,urlsafe_base64_encode
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 
+from accounts.utils import Util
+
 
 
 #User registration
@@ -106,6 +108,7 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
     class Meta:
         fields = ['email']
 
+
     def validate_email(self, value):
         # email = value.get('email')
         if User.objects.filter(email=value).exists():
@@ -116,6 +119,13 @@ class SendPasswordResetEmailSerializer(serializers.Serializer):
             print('reset token', token)
             link =f'http://localhost:3000/api/user/reset/{uid}/{token}'
             print('password resert link', link)
+            body = 'Click Following link ti reset your password '+ link
+            data = {
+                'subject':'Reset Your Password',
+                'body':body,
+                'to_email':user.email
+            }
+            Util.send_email(data)
             return value
 
         else:
