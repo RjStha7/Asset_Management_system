@@ -13,6 +13,7 @@ from rest_framework import viewsets
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from asset.pagination import CustomPagination
 # Create your views here.
 
 #Generate token mannualy
@@ -61,11 +62,23 @@ class UserLogoutView(APIView):
         
 class UserView(APIView):
     #  permission_classes = [IsAuthenticated]
-     def get(self, request, format=None):
+    #  def get(self, request, format=None):
+    #     try:
+    #         users = User.objects.all()
+    #         serializer = UserSerializer(users, many=True)
+    #         return Response(serializer.data, status=status.HTTP_200_OK)
+    #     except Exception as e:
+    #         return Response(
+    #             {'error': 'Error fetching users', 'details': str(e)},
+    #             status=status.HTTP_400_BAD_REQUEST
+    #         )
+    def get(self, request, format=None):
         try:
             users = User.objects.all()
-            serializer = UserSerializer(users, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            paginator = CustomPagination()
+            paginated_users = paginator.paginate_queryset(users, request)
+            serializer = UserSerializer(paginated_users, many=True)
+            return paginator.get_paginated_response(serializer.data)
         except Exception as e:
             return Response(
                 {'error': 'Error fetching users', 'details': str(e)},

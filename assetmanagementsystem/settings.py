@@ -26,9 +26,12 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # Use environment variables
-DEBUG = os.getenv("DEBUG", "False") == "True"
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+# DEBUG = os.getenv("DEBUG", "False") == "True"
+# SECRET_KEY = os.getenv("SECRET_KEY")
+# ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+DEBUG=True
+SECRET_KEY = 'django-insecure-@t*b4hc=%mnq)+88&_r!k--jr9&_i1*36tl#9p%(zv($k3!911'
+ALLOWED_HOSTS="*"
 
 
 # Application definition
