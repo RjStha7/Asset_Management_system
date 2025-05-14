@@ -13,11 +13,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-load_dotenv(os.path.join(BASE_DIR, '.env'))
+# load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -31,7 +31,7 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 # ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 DEBUG=True
 SECRET_KEY = 'django-insecure-@t*b4hc=%mnq)+88&_r!k--jr9&_i1*36tl#9p%(zv($k3!911'
-ALLOWED_HOSTS="*"
+ALLOWED_HOSTS=('*',)
 
 
 # Application definition
