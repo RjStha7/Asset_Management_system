@@ -31,7 +31,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 DEBUG=True
 SECRET_KEY = 'django-insecure-@t*b4hc=%mnq)+88&_r!k--jr9&_i1*36tl#9p%(zv($k3!911'
-ALLOWED_HOSTS=('*',)
+ALLOWED_HOSTS=[
+    '*',
+    'asset-management-system-2y9g.onrender.com',
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://asset-management-system-2y9g.onrender.com',
+]
 
 
 # Application definition
