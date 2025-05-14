@@ -11,8 +11,8 @@ from .serializers import (
 )
 
 class AssetCategoryViewSet(viewsets.ModelViewSet):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
+    # permission_classes = [IsAuthenticated]
     queryset = AssetCategory.objects.all().order_by('id')
     queryset = AssetCategory.objects.all()
     serializer_class = AssetCategorySerializer
