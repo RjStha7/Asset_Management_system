@@ -61,7 +61,6 @@ class UserLoginView(APIView):
                 return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-                
 
 #user logout
 class UserLogoutView(APIView):
@@ -74,6 +73,7 @@ class UserLogoutView(APIView):
             return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
         
 class UserView(APIView):
+    
     def get(self, request, format=None):
         try:
             users = User.objects.all()
