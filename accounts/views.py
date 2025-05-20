@@ -14,6 +14,7 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from asset.pagination import CustomPagination
+from rest_framework.permissions import IsAdminUser
 # Create your views here.
 
 #Generate token mannualy
@@ -25,7 +26,10 @@ def get_tokens_for_user(user):
         'access': str(refresh.access_token),
     }
 
+
+#user registration
 class UserRegistrationView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
     renderer_classes = [UserRenderer]
     def post(self, request, format =None):
         serializer = UserRegistrationSerializer(data=request.data)
@@ -35,7 +39,9 @@ class UserRegistrationView(APIView):
             return Response({'token': token, "message": "User registered successfully"}, status=status.HTTP_201_CREATED)
        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+#user login  
 class UserLoginView(APIView):
     def post(self, request, format=None):
         serializer = UserLoginSerializer(data=request.data)
@@ -46,11 +52,18 @@ class UserLoginView(APIView):
             
             if user is not None:
                 token = get_tokens_for_user(user)
-                return Response({'token': token,'message': 'Login successful'}, status=status.HTTP_200_OK)
+                return Response({
+                    'token': token,
+                    'is_admin': user.is_staff,
+                    'message': 'Login successful'
+                    }, status=status.HTTP_200_OK)
             else:
                 return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
+
+
                 
 
+#user logout
 class UserLogoutView(APIView):
     permission_classes = [IsAuthenticated]
     
@@ -61,17 +74,6 @@ class UserLogoutView(APIView):
             return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
         
 class UserView(APIView):
-    #  permission_classes = [IsAuthenticated]
-    #  def get(self, request, format=None):
-    #     try:
-    #         users = User.objects.all()
-    #         serializer = UserSerializer(users, many=True)
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     except Exception as e:
-    #         return Response(
-    #             {'error': 'Error fetching users', 'details': str(e)},
-    #             status=status.HTTP_400_BAD_REQUEST
-    #         )
     def get(self, request, format=None):
         try:
             users = User.objects.all()

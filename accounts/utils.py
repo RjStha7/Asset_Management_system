@@ -1,6 +1,5 @@
 from django.core.mail import EmailMessage
 import os
-
 class Util:
     @staticmethod
     def send_email(data):
@@ -14,3 +13,6 @@ class Util:
             email.send()
         except Exception as e:
             print(f'Faild to send email: {e}')
+
+print("EMAIL_USER:", os.environ.get('EMAIL_USER'))
+print("EMAIL_PASSWORD:", os.environ.get('EMAIL_PASSWORD'))
