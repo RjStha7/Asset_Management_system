@@ -1,15 +1,11 @@
-from ast import Pass
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate
-from accounts import serializers
 from accounts.serializers import ChangePasswordSerializer, SendPasswordResetEmailSerializer, UserPasswordResetSerializer, UserProfileSerializer, UserRegistrationSerializer, UserLoginSerializer, UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework import status
 from accounts.renderer import UserRenderer
-from rest_framework import viewsets
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -42,30 +38,66 @@ class UserRegistrationView(APIView):
 
 
 #user login  
+# class UserLoginView(APIView):
+#     renderer_classes = [UserRenderer]
+#     def post(self, request, format=None):
+#         serializer = UserLoginSerializer(data=request.data)
+#         if serializer.is_valid(raise_exception=True):
+#             email = serializer.validated_data.get('email')
+#             password = serializer.validated_data.get('password')
+#             user = authenticate(email=email, password=password)
+            
+#             if user is not None:
+#                 token = get_tokens_for_user(user)
+#                 return Response({
+#                     'token': token,
+#                     'is_admin': user.is_staff,
+#                     'message': 'Login successful'
+#                     }, status=status.HTTP_200_OK)
+#             else:
+#                 return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
+
+# with this code cookes is set automatically
 class UserLoginView(APIView):
     def post(self, request, format=None):
         serializer = UserLoginSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            email = serializer.validated_data.get('email')
-            password = serializer.validated_data.get('password')
-            user = authenticate(email=email, password=password)
-            
-            if user is not None:
-                token = get_tokens_for_user(user)
-                return Response({
-                    'token': token,
-                    'is_admin': user.is_staff,
-                    'message': 'Login successful'
-                    }, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Invalid username or password'}, status=status.HTTP_401_UNAUTHORIZED)
-
-
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data.get('email')
+        password = serializer.validated_data.get('password')
+        user = authenticate(email=email, password=password)
+        if user is not None:
+            token = get_tokens_for_user(user)
+            response = Response({
+                'is_admin': user.is_staff,
+                'message': 'Login successful'
+            }, status=status.HTTP_200_OK)
+            # Set access token as HTTP-only, Secure cookie
+            response.set_cookie(
+                key='access_token',
+                value=token['access'],
+                httponly=True,
+                secure=True,  # Only sent over HTTPS
+                samesite='Lax',  # Or 'Strict' for more security
+                max_age=60*60  # 1 hour, adjust as needed
+            )
+            # Optionally set refresh token as cookie too
+            response.set_cookie(
+                key='refresh_token',
+                value=token['refresh'],
+                httponly=True,
+                secure=True,
+                samesite='Lax',
+                max_age=7*24*60*60  # 7 days, adjust as needed
+            )
+            return response
+        else:
+            return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+                
 
 #user logout
 class UserLogoutView(APIView):
     permission_classes = [IsAuthenticated]
-    
+    renderer_classes = [UserRenderer]
     def post(self, request, format=None):
         try:
             return Response({'message': 'Successfully logged out'}, status=status.HTTP_200_OK)
@@ -73,7 +105,8 @@ class UserLogoutView(APIView):
             return Response({'error': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
         
 class UserView(APIView):
-    
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    renderer_classes = [UserRenderer]
     def get(self, request, format=None):
         try:
             users = User.objects.all()
@@ -89,7 +122,7 @@ class UserView(APIView):
     
 class ChangePasswordView(APIView):
     permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
-
+    renderer_classes = [UserRenderer]
     def post(self, request, *args, **kwargs):
         serializer = ChangePasswordSerializer(data=request.data, context={'user': request.user})
         if serializer.is_valid(raise_exception=True):
@@ -121,6 +154,7 @@ class UserPasswordResetView(APIView):
     
 class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
+    renderer_classes = [UserRenderer]
     def get(self, request, format=None):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)

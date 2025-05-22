@@ -1,4 +1,3 @@
-import email
 from django.forms import ValidationError
 from rest_framework import serializers
 from django.contrib.auth.models import User
@@ -13,7 +12,7 @@ from accounts.utils import Util
 
 
 
-#User registration
+#User registration 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     #For password conformation
     password = serializers.CharField(style={'input_type':'password'}, write_only=True, validators=[validate_password])
@@ -36,10 +35,6 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email already exists.")
         return value
-    
-    # def create(self, validate_data):
-    #     validate_data.pop('password2', None)
-    #     return User.objects.create_user(**validate_data)
     def create(self, validated_data):
         user_profile_data = validated_data.pop('userprofile', {})
         validated_data.pop('password2', None)
@@ -105,7 +100,33 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return user
     
 
+# class SendPasswordResetEmailSerializer(serializers.Serializer):
+#     email = serializers.EmailField(max_length=255)
+#     class Meta:
+#         fields = ['email']
 
+
+#     def validate_email(self, value):
+#         # email = value.get('email')
+#         if User.objects.filter(email=value).exists():
+#             user = User.objects.get(email = value)
+#             uid = urlsafe_base64_encode(force_bytes(user.id))
+#             print('encoded uid', uid)
+#             token = PasswordResetTokenGenerator().make_token(user)
+#             print('reset token', token)
+#             link =f'http://localhost:3000/api/user/reset/{uid}/{token}'
+#             print('password resert link', link)
+#             body = 'Click Following link to reset your password '+link
+#             data = {
+#                 'subject':'Reset Your Password',
+#                 'body':body,
+#                 'to_email':user.email
+#             }
+#             Util.send_email(data)
+#             return value
+
+#         else:
+#             raise ValidationError('Not a register user')
 
 # using another logic for sendng email
 class SendPasswordResetEmailSerializer(serializers.Serializer):
