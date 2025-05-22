@@ -202,12 +202,15 @@ SIMPLE_JWT = {
 
 PASSWORD_RESRT_TIMMEOUT=900
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "http://localhost:5173",
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",
+#     "http://127.0.0.1:3000",
+#     "http://localhost:5173",
     
-]
+    
+# ]
+CORS_ALLOW_ALL_ORIGINS = True
+
 
 AUTHENTICATION_BACKENDS = [
     'accounts.backends.EmailAuthBackend',          # <-- our custom backend

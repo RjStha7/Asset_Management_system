@@ -79,18 +79,18 @@ class UserLoginView(APIView):
             response.set_cookie(
                 key='access_token',
                 value=token['access'],
-                httponly=True,
-                secure=True,  # Only sent over HTTPS
-                samesite='Lax',  # Or 'Strict' for more security
+                httponly=False,
+                secure=False,  # Only sent over HTTPS
+                # samesite='Lax',  # Or 'Strict' for more security
                 max_age=60*60  # 1 hour, adjust as needed
             )
             # Optionally set refresh token as cookie too
             response.set_cookie(
                 key='refresh_token',
                 value=token['refresh'],
-                httponly=True,
-                secure=True,
-                samesite='Lax',
+                httponly=False,
+                secure=False,
+                # samesite='Lax',
                 max_age=7*24*60*60  # 7 days, adjust as needed
             )
             return response
