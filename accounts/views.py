@@ -11,6 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from asset.pagination import CustomPagination
 from rest_framework.permissions import IsAdminUser
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
 # Create your views here.
 
 #Generate token mannualy
@@ -68,6 +71,7 @@ class UserLoginView(APIView):
         if user is not None:
             token = get_tokens_for_user(user)
             response = Response({
+                'token': token,
                 'is_admin': user.is_staff,
                 'message': 'Login successful'
             }, status=status.HTTP_200_OK)
@@ -159,3 +163,34 @@ class UserProfileView(APIView):
         serializer = UserProfileSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def api_overview(request):
+    endpoints = {
+        'Register': '/api/user/register/',
+        'Login': '/api/user/login/',
+        'Logout': '/api/user/logout/',
+        'All_Users': '/api/user/users/',
+        'Change Password': '/api/user/change-password/',
+        'Send Reset Password Email': '/api/user/send-reset-password-email/',
+        'Reset Password': '/api/user/reset-password/<uid>/<token>/',
+        'User Profile': '/api/user/user-profile/',
+        'Admin Verify': '/api/user/admin-verify/',
+        "Categories": "/api/categories/",
+        "Assets": "/api/assets/",
+        "Asset-details": "/api/asset-details/",
+        "Asset-out": "/api/asset-out/"
+
+    }
+    return Response(endpoints)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def admin_verify(request):
+    user = request.user
+    return Response({
+        'is_admin': user.is_staff,
+        'is_superuser': user.is_superuser,
+    })   
+
