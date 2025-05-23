@@ -63,6 +63,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name','phone_number', 'address','is_staff']
+    
+    def get_is_staff(self, obj):
+        return obj.is_staff
 
 
 #User password change
