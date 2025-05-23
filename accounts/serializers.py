@@ -62,7 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
     is_staff = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name','phone_number', 'address']
+        fields = ['id', 'username', 'email', 'first_name', 'last_name','phone_number', 'address','is_staff']
 
 
 #User password change
