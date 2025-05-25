@@ -16,6 +16,9 @@ class AssetCategoryViewSet(viewsets.ModelViewSet):
     queryset = AssetCategory.objects.all().order_by('id')
     queryset = AssetCategory.objects.all()
     serializer_class = AssetCategorySerializer
+    # filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    # filterset_fields = ['name']  # rfilterable fields
+    # search_fields = ['name', 'description']  # searchable fields
 
 class AssetViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
