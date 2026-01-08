@@ -42,16 +42,22 @@ The backend is structured to support future **Artificial Intelligence and data a
 ## 🌐 Deployment
 
 The application is deployed on Render with:
--Automatic builds triggered from GitHub
--Continuous Integration & Continuous Deployment (CI/CD)
--Reliable and maintainable cloud-based backend infrastructure
+- Automatic builds triggered from GitHub
+- Continuous Integration & Continuous Deployment (CI/CD)
+- Reliable and maintainable cloud-based backend infrastructure
+
+---
 
 ## 📈 Future Enhancements
 
--Machine learning models for predictive asset analytics
--AI-powered reporting and insights
--Analytics and visualization dashboard
+- Machine learning models for predictive asset analytics
+- AI-powered reporting and insights
+- Analytics and visualization dashboard
+
+---
 
 ## 👨‍💻 Author
 
 Developed by a Computer Science graduate with a strong interest in Artificial Intelligence Design & Development, backend system architecture, and data-driven applications.
+
+---
